@@ -7,8 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+enum PerfilUsuario {
+  COORDENADOR
+  VOLUNTARIO
+}
+
+enum StatusVoluntario {
+  ATIVO
+  INATIVO
+}
+
+model Usuario {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  senhaHash    String
+  perfil       PerfilUsuario
+  voluntario   Voluntario?   @relation(fields: [voluntarioId], references: [id])
+  voluntarioId String?       @unique
+  criadoEm     DateTime      @default(now())
+  atualizadoEm DateTime      @updatedAt
+
+  @@map("usuarios")
+}
+
+model Voluntario {
+  id                String           @id @default(uuid())
+  nome              String
+  curso             String
+  contato           String
+  dataEntrada       DateTime
+  dataSaida         DateTime?
+  status            StatusVoluntario @default(ATIVO)
+  cargaHorariaTotal Float            @default(0)
+  usuario           Usuario?
+  criadoEm          DateTime         @default(now())
+  atualizadoEm      DateTime         @updatedAt
+
+  @@map("voluntarios")
 }
