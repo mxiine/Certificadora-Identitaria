@@ -6,5 +6,6 @@ import { VoluntariosRepository } from './voluntarios.repository';
 @Module({
     controllers: [VoluntariosController],
     providers: [VoluntariosService, VoluntariosRepository],
+    exports: [VoluntariosRepository],
 })
 export class VoluntariosModule { }
