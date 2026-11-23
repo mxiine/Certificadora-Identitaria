@@ -1,7 +1,13 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    ConflictException,
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { StatusVoluntario } from '@prisma/client';
+import { PerfilUsuario, StatusVoluntario } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { AuthUser } from '../../common/types/auth-user';
 import { VoluntariosRepository } from './voluntarios.repository';
 import { CreateVoluntarioDto } from './dto/create-voluntario.dto';
 import { UpdateVoluntarioDto } from './dto/update-voluntario.dto';
@@ -59,6 +65,13 @@ export class VoluntariosService {
             throw new NotFoundException('Voluntário não encontrado');
         }
         return voluntario;
+    }
+
+    async findOneForUser(id: string, user: AuthUser) {
+        if (user.perfil === PerfilUsuario.VOLUNTARIO && user.voluntarioId !== id) {
+            throw new ForbiddenException('Você só pode acessar o seu próprio cadastro');
+        }
+        return this.findOne(id);
     }
 
     async update(id: string, dto: UpdateVoluntarioDto) {
