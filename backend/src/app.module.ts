@@ -4,6 +4,9 @@ import { envValidationSchema } from './config/env.validation';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { VoluntariosModule } from './modules/voluntarios/voluntarios.module';
+import { OficinasModule } from './modules/oficinas/oficinas.module';
+import { VinculosModule } from './modules/vinculos/vinculos.module';
+import { AtendimentosModule } from './modules/atendimentos/atendimentos.module';
 
 @Module({
     imports: [
@@ -15,6 +18,9 @@ import { VoluntariosModule } from './modules/voluntarios/voluntarios.module';
         PrismaModule,
         AuthModule,
         VoluntariosModule,
+        OficinasModule,
+        VinculosModule,
+        AtendimentosModule,
     ],
 })
 export class AppModule { }

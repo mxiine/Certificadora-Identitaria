@@ -24,4 +24,19 @@ export class VoluntariosRepository {
     update(id: string, data: Prisma.VoluntarioUpdateInput) {
         return this.prisma.voluntario.update({ where: { id }, data });
     }
+
+    async recalcularCargaHoraria(
+        voluntarioId: string,
+        client: Prisma.TransactionClient = this.prisma,
+    ) {
+        const { _sum } = await client.vinculo.aggregate({
+            where: { voluntarioId },
+            _sum: { horas: true },
+        });
+
+        return client.voluntario.update({
+            where: { id: voluntarioId },
+            data: { cargaHorariaTotal: _sum.horas ?? 0 },
+        });
+    }
 }
