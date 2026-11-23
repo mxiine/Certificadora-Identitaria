@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { VoluntariosModule } from './modules/voluntarios/voluntarios.module';
 import { OficinasModule } from './modules/oficinas/oficinas.module';
 import { VinculosModule } from './modules/vinculos/vinculos.module';
+import { AtendimentosModule } from './modules/atendimentos/atendimentos.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { VinculosModule } from './modules/vinculos/vinculos.module';
         VoluntariosModule,
         OficinasModule,
         VinculosModule,
+        AtendimentosModule,
     ],
 })
 export class AppModule { }
