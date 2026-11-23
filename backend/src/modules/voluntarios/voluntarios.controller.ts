@@ -12,6 +12,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { AuthUser } from '../../common/types/auth-user';
 import { VoluntariosService } from './voluntarios.service';
 import { CreateVoluntarioDto } from './dto/create-voluntario.dto';
 import { UpdateVoluntarioDto } from './dto/update-voluntario.dto';
@@ -38,8 +40,8 @@ export class VoluntariosController {
 
     @Get(':id')
     @Roles('COORDENADOR', 'VOLUNTARIO')
-    findOne(@Param('id') id: string) {
-        return this.service.findOne(id);
+    findOne(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+        return this.service.findOneForUser(id, user);
     }
 
     @Patch(':id')
