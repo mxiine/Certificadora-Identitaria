@@ -7,6 +7,7 @@ import { VoluntariosModule } from './modules/voluntarios/voluntarios.module';
 import { OficinasModule } from './modules/oficinas/oficinas.module';
 import { VinculosModule } from './modules/vinculos/vinculos.module';
 import { AtendimentosModule } from './modules/atendimentos/atendimentos.module';
+import { IndicadoresModule } from './modules/indicadores/indicadores.module';
 
 @Module({
     imports: [
@@ -21,6 +22,7 @@ import { AtendimentosModule } from './modules/atendimentos/atendimentos.module';
         OficinasModule,
         VinculosModule,
         AtendimentosModule,
+        IndicadoresModule,
     ],
 })
 export class AppModule { }
