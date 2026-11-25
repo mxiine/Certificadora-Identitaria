@@ -60,6 +60,58 @@ src/
 
 A API sobe em `http://localhost:3333/api`.
 
-## Próximos passos
+## Testes
 
-Os módulos de domínio (Voluntários, Oficinas, Auth) serão implementados no PR de desenvolvimento inicial, seguindo a arquitetura em camadas descrita acima.
+```bash
+npm test          # testes unitários
+npm run test:cov  # com cobertura
+```
+
+## Deploy (Render)
+
+### 1. Banco de dados
+
+Crie um PostgreSQL gerenciado (Render Postgres, Neon, Supabase...) e copie a connection string: ela vira o `DATABASE_URL`.
+
+- Se o banco também for do Render, use a **Internal Database URL**.
+- Planos gratuitos de banco costumam expirar ou pausar. Confira as regras atuais no painel do provedor e crie o banco perto da data da apresentação.
+
+### 2. API (Web Service)
+
+No Render: **New > Web Service**, conecte o repositório do GitHub e configure:
+
+- **Language:** Docker
+- **Root Directory:** `backend` (se o repositório tiver front e back)
+- **Health Check Path:** `/api/health`
+- **Variáveis de ambiente:**
+
+| Variável | Valor |
+|---|---|
+| `NODE_ENV` | `production` |
+| `DATABASE_URL` | connection string do banco |
+| `JWT_SECRET` | segredo forte (gere com `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) |
+| `JWT_EXPIRES_IN` | `7d` |
+| `FRONTEND_URL` | URL do front na Vercel (várias origens separadas por vírgula) |
+
+Não defina `PORT`: o Render injeta sozinho. A cada deploy o container roda `prisma migrate deploy` antes de subir a API.
+
+### 3. Primeiro coordenador (seed)
+
+Rode **uma vez**, da sua máquina, apontando pro banco de produção (PowerShell):
+
+```powershell
+$env:DATABASE_URL="<connection string EXTERNA do banco>"
+$env:SEED_COORDENADOR_EMAIL="coordenacao@ellp.utfpr.edu.br"
+$env:SEED_COORDENADOR_SENHA="<uma senha forte>"
+npx prisma db seed
+```
+
+Depois **feche o terminal**, para não rodar um `migrate dev` apontando por engano pro banco de produção.
+
+### 4. Front (Vercel)
+
+Aponte a variável de URL da API do front para `https://<seu-servico>.onrender.com/api` e coloque a URL da Vercel no `FRONTEND_URL` da API.
+
+### 5. Antes da demonstração
+
+O Web Service gratuito dorme depois de um tempo sem tráfego e leva cerca de 1 minuto pra acordar. Abra `/api/health` alguns minutos antes de apresentar.
