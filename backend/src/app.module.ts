@@ -8,6 +8,7 @@ import { OficinasModule } from './modules/oficinas/oficinas.module';
 import { VinculosModule } from './modules/vinculos/vinculos.module';
 import { AtendimentosModule } from './modules/atendimentos/atendimentos.module';
 import { IndicadoresModule } from './modules/indicadores/indicadores.module';
+import { HealthModule } from './modules/health/health.module';
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { IndicadoresModule } from './modules/indicadores/indicadores.module';
         VinculosModule,
         AtendimentosModule,
         IndicadoresModule,
+        HealthModule,
     ],
 })
 export class AppModule { }
